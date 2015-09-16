@@ -7,4 +7,4 @@ A collection of challenge solutions.
 
 3. upvotes (30/30) - python
 
-
+4. schedule (100/100) - python
