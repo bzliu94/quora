@@ -10,3 +10,5 @@ A collection of challenge solutions.
 4. schedule (100/100) - python
 
 5. archery (30/30) - python
+
+6. related questions (30/30) - python
