@@ -12,3 +12,5 @@ A collection of challenge solutions.
 5. archery (30/30) - python
 
 6. related questions (30/30) - python, with alternate solution
+
+7. typeahead search (10/10) - python
