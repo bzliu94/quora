@@ -14,3 +14,5 @@ A collection of challenge solutions.
 6. related questions (30/30) - python, with alternate solution
 
 7. typeahead search (10/10) - python
+
+8. scrabble stepladder (10/10) - python
