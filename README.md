@@ -16,3 +16,5 @@ A collection of challenge solutions.
 7. typeahead search (10/10) - python
 
 8. scrabble stepladder (10/10) - python
+
+9. sorted set (9/9) - python
