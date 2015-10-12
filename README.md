@@ -18,3 +18,5 @@ A collection of challenge solutions.
 8. scrabble stepladder (10/10) - python
 
 9. sorted set (9/9) - python
+
+10. wombats (100/100) - python
