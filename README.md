@@ -20,3 +20,5 @@ A collection of challenge solutions.
 9. sorted set (9/9) - python
 
 10. wombats (100/100) - python
+
+11. ontology (100/100) - c++
