@@ -22,3 +22,5 @@ A collection of challenge solutions.
 10. wombats (100/100) - python
 
 11. ontology (100/100) - c++
+
+12. datacenter cooling (n/a) - python
