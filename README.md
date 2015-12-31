@@ -24,3 +24,5 @@ A collection of challenge solutions.
 11. ontology (100/100) - c++
 
 12. datacenter cooling (n/a) - python
+
+13. answer classifier (79.4/100) - python
