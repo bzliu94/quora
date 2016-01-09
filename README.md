@@ -26,3 +26,5 @@ A collection of challenge solutions.
 12. datacenter cooling (n/a) - python
 
 13. answer classifier (79.4/100) - python
+
+14. duplicate (145.53/200) - python
