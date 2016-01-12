@@ -28,3 +28,5 @@ A collection of challenge solutions.
 13. answer classifier (79.4/100) - python
 
 14. duplicate (145.53/200) - python
+
+15. labeler (133.02/200) - python
