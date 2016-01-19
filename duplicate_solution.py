@@ -1,6 +1,8 @@
 # 2016-01-08
 
-# uses cosine similarity
+# use cosine dissimilarity
+
+# use feature selection
 
 # scipy.sparse hstack, bmat are low-memory use for coo-type matrix in scipy 0.16.1
 
@@ -10,18 +12,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import numpy as np
 import scipy.sparse as sp
-def getSimilarityMetricValue(tf_idf_mat1, tf_idf_mat2, row_index):
+import math
+# cosine dissimilarity, which respects sparsity
+def getSimilarityMetricValue1(tf_idf_mat1, tf_idf_mat2, row_index):
   tf_idf_arr1 = tf_idf_mat1.toarray()[0]
   tf_idf_arr2 = tf_idf_mat2.toarray()[0]
-  dot_product = np.dot(tf_idf_arr1, tf_idf_arr2)
+  dot_product1 = np.dot(tf_idf_arr1, tf_idf_arr2)
   norm1 = np.linalg.norm(tf_idf_arr1)
   norm2 = np.linalg.norm(tf_idf_arr2)
   similarity_metric = None
   if norm1 == 0 or norm2 == 0:
-    similarity_metric = 0
+    similarity_metric1 = 1
   else:
-    similarity_metric = dot_product / (1.0 * norm1 * norm2)
-  return similarity_metric
+    similarity_metric1 = dot_product1 / (1.0 * norm1 * norm2)
+  difference = 1.0 - (math.acos(similarity_metric1) / math.pi)
+  return [difference]
 import re
 INTEGER_RE = r'(\d+)'
 QUOTED_TEXT_RE = r'"([^"\\]*(?:\\.[^"\\]*)*)"'
@@ -43,15 +48,15 @@ COMPONENT_RE = r'(?:' + VIEW_COUNT_RE + r'|' + QUESTION_TEXT_RE + r'|' + CONTEXT
 QUESTION_RE = r'(?:\{(?:' + COMPONENT_RE + r'(?:' + SEPARATOR_RE + COMPONENT_RE + r')*)\})'
 QUESTION_KEY = 0
 QUESTION_TEXT = 1
-CONTEXT_TOPIC = 2
-TOPICS = 3
-VIEW_COUNT = 4
-AGE = 5
-FOLLOW_COUNT = 6
-NAME = 7
-FOLLOWERS = 8
+TOPICS = 2
+VIEW_COUNT = 3
+AGE = 4
+FOLLOW_COUNT = 5
+# CONTEXT_TOPIC = 6
+NAME = 0
+FOLLOWERS = 1
 def parse(line):
-  json_dict = [None] * 9
+  json_dict = [None] * 6
   regex = re.compile(VIEW_COUNT_RE)
   m = regex.search(line)
   key = m.group(1)
@@ -60,7 +65,9 @@ def parse(line):
   m = regex.search(line)
   key = m.group(1)
   json_dict[QUESTION_TEXT] = key.decode("unicode_escape")
-  context_topic_dict = [None] * 9
+  # not dealing with context topic
+  """
+  context_topic_dict = [None] * 2
   regex = re.compile(CONTEXT_TOPIC_RE)
   m = regex.search(line)
   key = m.group(1)
@@ -77,7 +84,7 @@ def parse(line):
     key = m.group(1)
     context_topic_dict[FOLLOWERS] = int(key)
     json_dict[CONTEXT_TOPIC] = context_topic_dict
-  topics = []
+  """
   regex = re.compile(TOPICS_RE)
   m = regex.search(line)
   key = m.group(0)
@@ -86,8 +93,10 @@ def parse(line):
   m = regex.finditer(topics_str)
   key = [curr_m.group(0) for curr_m in m]
   topic_component_str_list = key
-  for topic_component_str in topic_component_str_list:
-    topic_component = [None] * 9
+  topics = [None] * len(topic_component_str_list)
+  for i in xrange(len(topic_component_str_list)):
+    topic_component_str = topic_component_str_list[i]
+    topic_component = [None] * 2
     regex = re.compile(NAME_RE)
     m = regex.search(topic_component_str)
     key = m.group(1)
@@ -96,7 +105,9 @@ def parse(line):
     m = regex.search(topic_component_str)
     key = m.group(1)
     topic_component[FOLLOWERS] = int(key)
-    topics.append(topic_component)
+    # not appending; pre-allocate space
+    # topics.append(topic_component)
+    topics[i] = topic_component
   json_dict[TOPICS] = topics
   regex = re.compile(FOLLOW_COUNT_RE)
   m = regex.search(line)
@@ -162,10 +173,14 @@ def main():
   line = stream.readline()
   n = int(line)
   questions = getQuestionAttributeDictionaries(stream, n)
+  key_to_question_dict = {}
+  for question in questions:
+    key = question[QUESTION_KEY]
+    key_to_question_dict[key] = question
   gc.collect()
   docs = getDocuments(questions)
   gc.collect()
-  vectorizer = TfidfVectorizer(ngram_range=(1,3), analyzer='char', max_df = 0.5, sublinear_tf = True, lowercase = True)
+  vectorizer = TfidfVectorizer(ngram_range = (1, 3), analyzer = 'char', max_df = 0.5, sublinear_tf = True, lowercase = True)
   vectorizer.fit(docs)
   del docs
   question_keys = [q[QUESTION_KEY] for q in questions]
@@ -179,6 +194,8 @@ def main():
   pre_train_list2 = np.array([None] * d)
   pre_train_bag_list = np.array([None] * d)
   target = []
+  questions1 = []
+  questions2 = []
   for i in xrange(d):
       line = stream.readline()
       x, y, z = line.split()
@@ -188,29 +205,38 @@ def main():
       pre_train_list1[i] = pre_train1
       pre_train_list2[i] = pre_train2
       target.append(int(z))
+      q1 = key_to_question_dict[x]
+      q2 = key_to_question_dict[y]
+      questions1.append(q1)
+      questions2.append(q2)
   tf_idf_vectors1 = vectorizer.transform(pre_train_list1, copy = False)
   tf_idf_vectors2 = vectorizer.transform(pre_train_list2, copy = False)
-  pass
-  next_tf_idf_vectors1 = tf_idf_vectors1
-  next_tf_idf_vectors2 = tf_idf_vectors2
-  c1 = [[getSimilarityMetricValue(next_tf_idf_vectors1[x], next_tf_idf_vectors2[x], x)] for x in xrange(next_tf_idf_vectors1.shape[0])]
+  vectors1 = tf_idf_vectors1
+  vectors2 = tf_idf_vectors2
+  c1 = [getSimilarityMetricValue1(vectors1[x], vectors2[x], x) for x in xrange(vectors1.shape[0])]
   del pre_train_list1
   del pre_train_list2
-  del next_tf_idf_vectors1
-  del next_tf_idf_vectors2
+  del vectors1
+  del vectors2
   del tf_idf_vectors1
   del tf_idf_vectors2
   gc.collect()
   tf_idf_bag_vector_list = vectorizer.transform(pre_train_bag_list, copy = False)
   del pre_train_bag_list
-  c2 = sp.csr_matrix(tf_idf_bag_vector_list, dtype = "f")
-  c3 = sp.csr_matrix(c1, dtype = "f")
+  # this could be a csr matrix
+  c2 = sp.coo_matrix(tf_idf_bag_vector_list, dtype = "f")
+  c3 = c1
   h = lowMemoryHStack(c2, c3)
   del c1, c2, c3
   del tf_idf_bag_vector_list
   gc.collect()
   train = h
-  clf = LogisticRegression(C=2.0)
+  from sklearn.pipeline import Pipeline
+  from sklearn.feature_selection import SelectKBest, chi2
+  clf = LogisticRegression(C = 2.0)
+  # 25,877 features
+  selector = SelectKBest(chi2, k=24000)
+  clf = Pipeline([('sel', selector), ('logr', clf)])
   model = clf
   model.fit(train, target)
   line = stream.readline()
@@ -219,6 +245,8 @@ def main():
   pred_list1 = np.array([None] * need)
   pred_list2 = np.array([None] * need)
   legend = []
+  questions1 = []
+  questions2 = []
   for i in xrange(need):
       line = stream.readline()
       x, y = line.split()
@@ -228,24 +256,28 @@ def main():
       pred2 = conved[y]
       pred_list1[i] = pred1
       pred_list2[i] = pred2
+      q1 = key_to_question_dict[x]
+      q2 = key_to_question_dict[y]
+      questions1.append(q1)
+      questions2.append(q2)
   tf_idf_vectors1 = vectorizer.transform(pred_list1, copy = False)
   tf_idf_vectors2 = vectorizer.transform(pred_list2, copy = False)
   del pred_list1
   del pred_list2
   gc.collect()
-  next_tf_idf_vectors1 = tf_idf_vectors1
-  next_tf_idf_vectors2 = tf_idf_vectors2
+  vectors1 = tf_idf_vectors1
+  vectors2 = tf_idf_vectors2
   tf_idf_bag_vector_list = vectorizer.transform(pred_bag_list, copy = False)
   del pred_bag_list
-  c1 = [[getSimilarityMetricValue(next_tf_idf_vectors1[x], next_tf_idf_vectors2[x], x)] for x in xrange(next_tf_idf_vectors1.shape[0])]
-  del next_tf_idf_vectors1
-  del next_tf_idf_vectors2
+  c1 = [getSimilarityMetricValue1(vectors1[x], vectors2[x], x) for x in xrange(vectors1.shape[0])]
+  del vectors1
+  del vectors2
   del tf_idf_vectors1
   del tf_idf_vectors2
   gc.collect()
-  c2 = sp.csr_matrix(tf_idf_bag_vector_list, dtype = "f")
-  c3 = sp.csr_matrix(c1, dtype = "f")
-  h = sp.hstack((c2, c3), format = "csr")
+  c2 = sp.coo_matrix(tf_idf_bag_vector_list, dtype = "f")
+  c3 = c1
+  h = sp.hstack((c2, c3), format = "coo")
   pred = h
   pred = model.predict(pred)
   del c1, c2, c3
