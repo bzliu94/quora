@@ -18,6 +18,8 @@
 
 # use inquisitive first word existence
 
+# avoid 'auto' mode for logistic regression to favor high-popularity topics
+
 # inspired by mike koltsov
 
 import sys, string
@@ -139,7 +141,8 @@ mat4 = getInquisitiveWordMat(questions)
 # concatenate tf-idf vectorizer output with other feature matrices
 mat = sp.hstack((mat1, mat3, mat4))
 train = mat
-clf = LogisticRegression(C = 4.0, class_weight = 'auto')
+# clf = LogisticRegression(C = 4.0, class_weight = 'auto')
+clf = LogisticRegression(C = 4.0)
 selector = SelectKBest(chi2, k=1300)
 clf = Pipeline([('sel', selector), ('logr', clf)])
 clf = OneVsRestClassifier(clf)
