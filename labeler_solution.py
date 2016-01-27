@@ -18,7 +18,7 @@
 
 # use inquisitive first word existence
 
-# avoid 'auto' mode for logistic regression to favor high-popularity topics
+# use average word length
 
 # inspired by mike koltsov
 
@@ -40,7 +40,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
 import numpy as np
 import scipy.sparse as sp
-vectorizer1 = TfidfVectorizer(ngram_range = (1, 1), analyzer = 'word', max_df = 0.8, sublinear_tf = False, lowercase = True)
+vectorizer1 = TfidfVectorizer(ngram_range = (1, 1), analyzer = 'word', max_df = 0.8, sublinear_tf = False, lowercase = True, norm = None)
 questions = []
 NUM_LABELS = 250
 target = []
@@ -137,13 +137,27 @@ def getInquisitiveWordMat(questions):
   begins_with_inquisitive_word_list = [beginsWithInquisitiveWord(x) for x in question_text_list]
   result_mat = sp.csr_matrix([[x] for x in begins_with_inquisitive_word_list])
   return result_mat
+def getAverageWordLength(curr_str):
+  words = getCoarseWords(curr_str)
+  word_lengths = [len(x) for x in words]
+  num_words = len(words)
+  return sum(word_lengths) / (1.0 * num_words)
+def getAverageWordLengthMat(questions):
+  question_text_list = [x["question_text"] for x in questions]
+  avg_word_length_list = [getAverageWordLength(x) / (1.0 * 10.25) for x in question_text_list]
+  documents = [[x * 2] for x in avg_word_length_list]
+  result_mat = sp.csr_matrix(documents)
+  return result_mat
 mat4 = getInquisitiveWordMat(questions)
+mat5 = getAverageWordLengthMat(questions)
 # concatenate tf-idf vectorizer output with other feature matrices
-mat = sp.hstack((mat1, mat3, mat4))
+mat = sp.hstack((mat1, mat3, mat4, mat5))
+from sklearn.preprocessing import normalize
+mat = normalize(mat, copy = False)
 train = mat
-# clf = LogisticRegression(C = 4.0, class_weight = 'auto')
-clf = LogisticRegression(C = 4.0)
-selector = SelectKBest(chi2, k=1300)
+clf = LogisticRegression(C = 5.0)
+# 14,426 features
+selector = SelectKBest(chi2, k=14400)
 clf = Pipeline([('sel', selector), ('logr', clf)])
 clf = OneVsRestClassifier(clf)
 model = clf
@@ -161,7 +175,10 @@ test_docs = getDocuments(test_questions)
 mat1 = vectorizer1.transform(test_docs)
 mat3 = getWordCountUnderOvershootMat(questions, test_questions)
 mat4 = getInquisitiveWordMat(test_questions)
-test = sp.hstack((mat1, mat3, mat4))
+mat5 = getAverageWordLengthMat(test_questions)
+mat = sp.hstack((mat1, mat3, mat4, mat5))
+mat = normalize(mat, copy = False)
+test = mat
 pred = model.predict_proba(test)
 for topic_prob_vector in pred:
   topic_prob_list = list(topic_prob_vector)
