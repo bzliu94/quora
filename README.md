@@ -30,3 +30,5 @@ A collection of challenge solutions.
 14. duplicate (146.07/200) - python
 
 15. labeler (134.88/200) - python
+
+16. answered (65.16/100) - python
