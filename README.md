@@ -34,3 +34,5 @@ A collection of challenge solutions.
 16. answered (65.16/100) - python
 
 17. interest (68.50/100) - python
+
+18. views (54.58/100) - python
