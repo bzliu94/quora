@@ -36,3 +36,5 @@ A collection of challenge solutions.
 17. interest (68.50/100) - python
 
 18. views (54.58/100) - python
+
+19. browser extensions - quora image-started question posting (QISQP) - html, css, javascript, jquery

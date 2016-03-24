@@ -1,0 +1,33 @@
+.qisqp_old {
+	color: gray;
+}
+
+.qisqp_current {
+	color: black;
+	/* background-color: yellow; */
+}
+
+.qisqp_box {
+	position: fixed;
+	bottom: 0;
+	background-color: silver;
+	z-index: 9999;
+	animation-delay: 5s;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+	animation-timing-function: ease-out;
+}
+
+.qisqp_fade_out {
+	animation-name: qisqp_fade_out;
+}
+
+@keyframes qisqp_fade_out {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+    		visibility: hidden;
+	}
+}

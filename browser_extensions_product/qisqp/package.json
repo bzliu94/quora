@@ -1,0 +1,17 @@
+{
+  "title": "Quora image-started question posting (QISQP)",
+  "name": "qisqp",
+  "version": "0.1.0",
+  "description": "Start a post by right clicking on an image in a document or just an image in the browser. Works for images with JPG/JPEG, PNG, GIF, BMP as their extension.",
+  "main": "index.js",
+  "author": "bzliu94",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "icon": "resource://@qisqp/data/qisqp_32.png",
+  "permissions": {
+    "cross-domain-content": ["https://www.quora.com"]
+  }
+}
