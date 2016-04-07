@@ -38,3 +38,5 @@ A collection of challenge solutions.
 18. views (54.58/100) - python
 
 19. browser extensions - quora image-started question posting (QISQP) - html, css, javascript, jquery
+
+20. choosing a substring (n/a) - python
