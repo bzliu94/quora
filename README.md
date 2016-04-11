@@ -40,3 +40,5 @@ A collection of challenge solutions.
 19. browser extensions - quora image-started question posting (QISQP) - html, css, javascript, jquery
 
 20. choosing a substring (n/a) - python
+
+21. suggesting the right hotel (n/a) - python
