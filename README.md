@@ -42,3 +42,5 @@ A collection of challenge solutions.
 20. choosing a substring (n/a) - python
 
 21. suggesting the right hotel (n/a) - python
+
+22. python uri - python
