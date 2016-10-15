@@ -44,3 +44,5 @@ A collection of challenge solutions.
 21. suggesting the right hotel (n/a) - python
 
 22. python uri - python
+
+23. trend analyzer - python
