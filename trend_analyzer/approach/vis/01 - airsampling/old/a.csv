@@ -1,0 +1,869 @@
+STATE NAME,CAS NUMBER,SUBSTANCE,DETECTED
+C,C,C,C
+,,,false
+Louisiana,,,
+,,Toluene,
+,108-88-3,,
+,,Benzene,
+,71-43-2,,
+,,Ethylbenzene,
+,100-41-4,,
+,,o-Xylene,
+,95-47-6,,
+,,m p-Xylene,
+,179601-23-1,,
+,,Ethylbenzene,false
+,100-41-4,,false
+,100-41-4,,
+,,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,100-41-4,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,,o-Xylene,false
+,95-47-6,,false
+,95-47-6,,
+,,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+,95-47-6,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+Louisiana,,Toluene,
+Louisiana,108-88-3,,
+,108-88-3,,
+,,Toluene,
+,108-88-3,Toluene,
+,,Toluene,
+,108-88-3,,
+,,Toluene,
+,108-88-3,,
+Louisiana,,Benzene,
+Louisiana,71-43-2,,
+Louisiana,,o-Xylene,
+Louisiana,95-47-6,,
+,71-43-2,,
+,,Benzene,
+,95-47-6,,
+,,o-Xylene,
+,71-43-2,Benzene,
+,,Benzene,
+,71-43-2,,
+,,Benzene,
+,71-43-2,,
+,95-47-6,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+,,o-Xylene,
+,95-47-6,,
+Louisiana,,Ethylbenzene,
+Louisiana,100-41-4,,
+,100-41-4,,
+,,Ethylbenzene,
+,100-41-4,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,,Ethylbenzene,
+,100-41-4,,
+Louisiana,,Ethylbenzene,false
+Louisiana,100-41-4,,false
+Louisiana,100-41-4,,
+Louisiana,,Ethylbenzene,
+Louisiana,,Ethylbenzene,
+Louisiana,100-41-4,,
+Louisiana,100-41-4,Ethylbenzene,
+Louisiana,,Ethylbenzene,
+Louisiana,100-41-4,,
+,100-41-4,,false
+,,Ethylbenzene,false
+,100-41-4,Ethylbenzene,false
+,,Ethylbenzene,false
+,100-41-4,,false
+,,Ethylbenzene,false
+,100-41-4,,false
+,100-41-4,,
+,100-41-4,,
+,,Ethylbenzene,
+,,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,100-41-4,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,100-41-4,,
+,100-41-4,Ethylbenzene,
+,,Ethylbenzene,
+,100-41-4,,
+,,Ethylbenzene,
+,100-41-4,,
+Louisiana,,o-Xylene,false
+Louisiana,95-47-6,,false
+Louisiana,95-47-6,,
+Louisiana,,o-Xylene,
+Louisiana,,o-Xylene,
+Louisiana,95-47-6,,
+Louisiana,95-47-6,o-Xylene,
+Louisiana,,o-Xylene,
+Louisiana,95-47-6,,
+,95-47-6,,false
+,,o-Xylene,false
+,95-47-6,o-Xylene,false
+,,o-Xylene,false
+,95-47-6,,false
+,,o-Xylene,false
+,95-47-6,,false
+,95-47-6,,
+,95-47-6,,
+,,o-Xylene,
+,,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+,95-47-6,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+,,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+,95-47-6,,
+,95-47-6,o-Xylene,
+,,o-Xylene,
+,95-47-6,,
+,,o-Xylene,
+,95-47-6,,
+,,PM2.5,
+,EDF-213,,
+,,m p-Xylene,false
+,179601-23-1,,false
+,179601-23-1,,
+,,m p-Xylene,
+,,m p-Xylene,
+,179601-23-1,,
+,179601-23-1,m p-Xylene,
+,,m p-Xylene,
+,179601-23-1,,
+,,Benzene,false
+,71-43-2,,false
+Louisiana,,m p-Xylene,
+Louisiana,179601-23-1,,
+,179601-23-1,,
+,,m p-Xylene,
+,179601-23-1,m p-Xylene,
+,,m p-Xylene,
+,179601-23-1,,
+,,m p-Xylene,
+,179601-23-1,,
+,,PM2.5,true
+,EDF-213,,true
+,EDF-213,,
+,,PM2.5,
+,,PM2.5,
+,EDF-213,,
+,EDF-213,PM2.5,
+,,PM2.5,
+,EDF-213,,
+Louisiana,,PM2.5,
+Louisiana,EDF-213,,
+,EDF-213,,
+,,PM2.5,
+,EDF-213,PM2.5,
+,,PM2.5,
+,EDF-213,,
+,,PM2.5,
+,EDF-213,,
+Louisiana,,PM2.5,true
+Louisiana,EDF-213,,true
+Louisiana,EDF-213,,
+Louisiana,,PM2.5,
+Louisiana,,PM2.5,
+Louisiana,EDF-213,,
+Louisiana,EDF-213,PM2.5,
+Louisiana,,PM2.5,
+Louisiana,EDF-213,,
+,EDF-213,,true
+,,PM2.5,true
+,EDF-213,PM2.5,true
+,,PM2.5,true
+,EDF-213,,true
+,,PM2.5,true
+,EDF-213,,true
+,EDF-213,,
+,EDF-213,,
+,,PM2.5,
+,,PM2.5,
+,,PM2.5,
+,EDF-213,,
+,EDF-213,PM2.5,
+,,PM2.5,
+,EDF-213,,
+,,PM2.5,
+,,PM2.5,
+,EDF-213,,
+,EDF-213,,
+,EDF-213,PM2.5,
+,,PM2.5,
+,EDF-213,,
+,,PM2.5,
+,EDF-213,,
+Louisiana,,Benzene,false
+Louisiana,71-43-2,,false
+,71-43-2,,false
+,,Benzene,false
+,71-43-2,Benzene,false
+,,Benzene,false
+,71-43-2,,false
+,,Benzene,false
+,71-43-2,,false
+Louisiana,71-43-2,,
+Louisiana,,Benzene,
+Louisiana,,Benzene,
+Louisiana,71-43-2,,
+Louisiana,71-43-2,Benzene,
+Louisiana,,Benzene,
+Louisiana,71-43-2,,
+Louisiana,,m p-Xylene,false
+Louisiana,179601-23-1,,false
+Louisiana,179601-23-1,,
+Louisiana,,m p-Xylene,
+Louisiana,,m p-Xylene,
+Louisiana,179601-23-1,,
+Louisiana,179601-23-1,m p-Xylene,
+Louisiana,,m p-Xylene,
+Louisiana,179601-23-1,,
+,179601-23-1,,false
+,,m p-Xylene,false
+,179601-23-1,m p-Xylene,false
+,,m p-Xylene,false
+,179601-23-1,,false
+,,m p-Xylene,false
+,179601-23-1,,false
+,,Toluene,false
+,108-88-3,,false
+,,Toluene,true
+,108-88-3,,true
+Louisiana,,Toluene,false
+Louisiana,108-88-3,,false
+,108-88-3,,false
+,,Toluene,false
+,108-88-3,Toluene,false
+,,Toluene,false
+,108-88-3,,false
+,,Toluene,false
+,108-88-3,,false
+Louisiana,,Toluene,true
+Louisiana,108-88-3,,true
+,,Benzene,true
+,71-43-2,,true
+,,m p-Xylene,true
+,179601-23-1,,true
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,,Naphthalene,
+,91-20-3,,
+,,Benz[a]anthracene,
+,56-55-3,,
+,,Naphthalene,true
+,91-20-3,,true
+,,Benzo[k]fluoranthene,false
+,207-08-9,,false
+,91-20-3,,
+,,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,91-20-3,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,207-08-9,,
+,,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,207-08-9,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,,Benz[a]anthracene,false
+,56-55-3,,false
+,56-55-3,,
+,,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,56-55-3,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,,Chrysene,
+,218-01-9,,
+,53-70-3,,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,false
+,,Dibenz[a h]anthracene,
+,53-70-3,,false
+,53-70-3,,
+,53-70-3,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,,Benzo[a]pyrene,false
+,50-32-8,,false
+,50-32-8,,
+,,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,50-32-8,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,,Benzo(b)fluoranthene,false
+,205-99-2,,false
+,205-99-2,,
+,,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,205-99-2,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Indeno[1 2 3-cd]pyrene,false
+,193-39-5,,false
+,193-39-5,,
+,,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,193-39-5,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+Louisiana,,Benzene,true
+Louisiana,71-43-2,,true
+,,Chrysene,false
+,218-01-9,,false
+,218-01-9,,
+,,Chrysene,
+,,Chrysene,
+,218-01-9,,
+,218-01-9,Chrysene,
+,,Chrysene,
+,218-01-9,,
+Louisiana,56-55-3,,
+Louisiana,,Benz[a]anthracene,
+Louisiana,56-55-3,,
+Louisiana,,Benz[a]anthracene,
+Louisiana,,Benz[a]anthracene,false
+Louisiana,,Benz[a]anthracene,
+Louisiana,56-55-3,,false
+Louisiana,56-55-3,,
+Louisiana,56-55-3,Benz[a]anthracene,
+Louisiana,,Benz[a]anthracene,
+Louisiana,56-55-3,,
+,56-55-3,,false
+,,Benz[a]anthracene,false
+,56-55-3,Benz[a]anthracene,false
+,,Benz[a]anthracene,false
+,56-55-3,,false
+,,Benz[a]anthracene,false
+,56-55-3,,false
+,56-55-3,,
+,,Benz[a]anthracene,
+,56-55-3,,
+,56-55-3,,
+,56-55-3,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,,Benz[a]anthracene,
+,56-55-3,,
+,,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,56-55-3,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,56-55-3,,
+,56-55-3,Benz[a]anthracene,
+,,Benz[a]anthracene,
+,56-55-3,,
+,,Benz[a]anthracene,
+,56-55-3,,
+Louisiana,,Naphthalene,
+Louisiana,91-20-3,,
+Louisiana,207-08-9,,
+Louisiana,,Benzo[k]fluoranthene,
+Louisiana,207-08-9,,
+Louisiana,,Benzo[k]fluoranthene,
+Louisiana,,Benzo[k]fluoranthene,false
+Louisiana,,Benzo[k]fluoranthene,
+Louisiana,207-08-9,,false
+Louisiana,207-08-9,,
+Louisiana,207-08-9,Benzo[k]fluoranthene,
+Louisiana,,Benzo[k]fluoranthene,
+Louisiana,207-08-9,,
+,207-08-9,,false
+,,Benzo[k]fluoranthene,false
+,207-08-9,Benzo[k]fluoranthene,false
+,,Benzo[k]fluoranthene,false
+,207-08-9,,false
+,,Benzo[k]fluoranthene,false
+,207-08-9,,false
+,91-20-3,,
+,,Naphthalene,
+,91-20-3,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,,Naphthalene,
+,91-20-3,,
+,207-08-9,,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,207-08-9,,
+,207-08-9,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,207-08-9,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,207-08-9,,
+,207-08-9,Benzo[k]fluoranthene,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+,,Benzo[k]fluoranthene,
+,207-08-9,,
+Louisiana,,Naphthalene,true
+Louisiana,91-20-3,,true
+Louisiana,91-20-3,,
+Louisiana,,Naphthalene,
+Louisiana,,Naphthalene,
+Louisiana,91-20-3,,
+Louisiana,91-20-3,Naphthalene,
+Louisiana,,Naphthalene,
+Louisiana,91-20-3,,
+,91-20-3,,true
+,,Naphthalene,true
+,91-20-3,Naphthalene,true
+,,Naphthalene,true
+,91-20-3,,true
+,,Naphthalene,true
+,91-20-3,,true
+,91-20-3,,
+,91-20-3,,
+,,Naphthalene,
+,,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,91-20-3,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,91-20-3,,
+,91-20-3,Naphthalene,
+,,Naphthalene,
+,91-20-3,,
+,,Naphthalene,
+,91-20-3,,
+Louisiana,53-70-3,,
+Louisiana,,Dibenz[a h]anthracene,
+Louisiana,53-70-3,,
+Louisiana,,Dibenz[a h]anthracene,
+Louisiana,218-01-9,,
+Louisiana,,Chrysene,
+Louisiana,218-01-9,,
+Louisiana,,Chrysene,
+Louisiana,205-99-2,,
+Louisiana,,Benzo(b)fluoranthene,
+Louisiana,205-99-2,,
+Louisiana,,Benzo(b)fluoranthene,
+Louisiana,50-32-8,,
+Louisiana,,Benzo[a]pyrene,
+Louisiana,50-32-8,,
+Louisiana,,Benzo[a]pyrene,
+Louisiana,,Dibenz[a h]anthracene,false
+Louisiana,,Dibenz[a h]anthracene,
+Louisiana,53-70-3,,false
+Louisiana,53-70-3,,
+Louisiana,53-70-3,Dibenz[a h]anthracene,
+Louisiana,,Dibenz[a h]anthracene,
+Louisiana,53-70-3,,
+Louisiana,,Chrysene,false
+Louisiana,,Chrysene,
+Louisiana,218-01-9,,false
+Louisiana,218-01-9,,
+Louisiana,218-01-9,Chrysene,
+Louisiana,,Chrysene,
+Louisiana,218-01-9,,
+Louisiana,,Benzo(b)fluoranthene,false
+Louisiana,,Benzo(b)fluoranthene,
+Louisiana,205-99-2,,false
+Louisiana,205-99-2,,
+Louisiana,205-99-2,Benzo(b)fluoranthene,
+Louisiana,,Benzo(b)fluoranthene,
+Louisiana,205-99-2,,
+Louisiana,,Benzo[a]pyrene,false
+Louisiana,,Benzo[a]pyrene,
+Louisiana,50-32-8,,false
+Louisiana,50-32-8,,
+Louisiana,50-32-8,Benzo[a]pyrene,
+Louisiana,,Benzo[a]pyrene,
+Louisiana,50-32-8,,
+,218-01-9,,false
+,,Chrysene,false
+,218-01-9,Chrysene,false
+,,Chrysene,false
+,218-01-9,,false
+,,Chrysene,false
+,218-01-9,,false
+,205-99-2,,false
+,,Benzo(b)fluoranthene,false
+,205-99-2,Benzo(b)fluoranthene,false
+,,Benzo(b)fluoranthene,false
+,205-99-2,,false
+,,Benzo(b)fluoranthene,false
+,205-99-2,,false
+,50-32-8,,false
+,,Benzo[a]pyrene,false
+,50-32-8,Benzo[a]pyrene,false
+,,Benzo[a]pyrene,false
+,50-32-8,,false
+,,Benzo[a]pyrene,false
+,50-32-8,,false
+,53-70-3,,
+,,Dibenz[a h]anthracene,
+,53-70-3,,false
+,53-70-3,,
+,53-70-3,,
+,53-70-3,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,,Dibenz[a h]anthracene,false
+,,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,
+,53-70-3,Dibenz[a h]anthracene,false
+,,Dibenz[a h]anthracene,false
+,,Dibenz[a h]anthracene,
+,53-70-3,,false
+,53-70-3,,
+,53-70-3,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,,Dibenz[a h]anthracene,false
+,,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,
+,53-70-3,,false
+,53-70-3,,
+,53-70-3,,
+,53-70-3,Dibenz[a h]anthracene,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,,Dibenz[a h]anthracene,
+,53-70-3,,
+,218-01-9,,
+,,Chrysene,
+,218-01-9,,
+,218-01-9,,
+,218-01-9,Chrysene,
+,,Chrysene,
+,218-01-9,,
+,,Chrysene,
+,218-01-9,,
+,,Chrysene,
+,,Chrysene,
+,,Chrysene,
+,218-01-9,,
+,218-01-9,Chrysene,
+,,Chrysene,
+,218-01-9,,
+,,Chrysene,
+,,Chrysene,
+,218-01-9,,
+,218-01-9,,
+,218-01-9,Chrysene,
+,,Chrysene,
+,218-01-9,,
+,,Chrysene,
+,218-01-9,,
+,205-99-2,,
+,,Benzo(b)fluoranthene,
+,50-32-8,,
+,,Benzo[a]pyrene,
+,205-99-2,,
+,205-99-2,,
+,205-99-2,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,50-32-8,,
+,50-32-8,,
+,50-32-8,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,205-99-2,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,205-99-2,,
+,205-99-2,Benzo(b)fluoranthene,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Benzo(b)fluoranthene,
+,205-99-2,,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,50-32-8,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,50-32-8,,
+,50-32-8,Benzo[a]pyrene,
+,,Benzo[a]pyrene,
+,50-32-8,,
+,,Benzo[a]pyrene,
+,50-32-8,,
+Louisiana,193-39-5,,
+Louisiana,,Indeno[1 2 3-cd]pyrene,
+Louisiana,193-39-5,,
+Louisiana,,Indeno[1 2 3-cd]pyrene,
+,,o-Xylene,true
+,95-47-6,,true
+Louisiana,,Indeno[1 2 3-cd]pyrene,false
+Louisiana,,Indeno[1 2 3-cd]pyrene,
+Louisiana,193-39-5,,false
+Louisiana,193-39-5,,
+Louisiana,193-39-5,Indeno[1 2 3-cd]pyrene,
+Louisiana,,Indeno[1 2 3-cd]pyrene,
+Louisiana,193-39-5,,
+,193-39-5,,false
+,,Indeno[1 2 3-cd]pyrene,false
+,193-39-5,Indeno[1 2 3-cd]pyrene,false
+,,Indeno[1 2 3-cd]pyrene,false
+,193-39-5,,false
+,,Indeno[1 2 3-cd]pyrene,false
+,193-39-5,,false
+,193-39-5,,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,193-39-5,,
+,193-39-5,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,193-39-5,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,193-39-5,,
+,193-39-5,Indeno[1 2 3-cd]pyrene,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,,Indeno[1 2 3-cd]pyrene,
+,193-39-5,,
+,,Ethylbenzene,true
+,100-41-4,,true
+Louisiana,,m p-Xylene,true
+Louisiana,179601-23-1,,true
+,136777-61-2,,
+,,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+,136777-61-2,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+Louisiana,,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+Louisiana,136777-61-2,,
+,136777-61-2,,
+Mississippi,108-88-3,,
+Mississippi,,Toluene,
+Mississippi,108-88-3,,
+Mississippi,,Toluene,
+Mississippi,,Ethylbenzene,
+Mississippi,100-41-4,,
+Mississippi,,Toluene,true
+Mississippi,,Toluene,
+Mississippi,108-88-3,,true
+Mississippi,108-88-3,,
+Mississippi,108-88-3,Toluene,
+Mississippi,,Toluene,
+Mississippi,108-88-3,,
+Mississippi,,o-Xylene,
+Mississippi,95-47-6,,
+Mississippi,,Benzene,
+Mississippi,71-43-2,,
+Mississippi,,m p-Xylene,
+Mississippi,179601-23-1,,
+Florida,,Benzene,
+Florida,71-43-2,,
+Mississippi,,Benzene,true
+Mississippi,71-43-2,,true
+Mississippi,71-43-2,,
+Mississippi,,Benzene,
+Mississippi,,Benzene,
+Mississippi,71-43-2,,
+Mississippi,71-43-2,Benzene,
+Mississippi,,Benzene,
+Mississippi,71-43-2,,
+Florida,108-88-3,,
+Florida,,Toluene,
+Florida,108-88-3,,
+Florida,,Toluene,
+Florida,,Ethylbenzene,
+Florida,100-41-4,,
+Florida,,m p-Xylene,
+Florida,179601-23-1,,
+Florida,,o-Xylene,
+Florida,95-47-6,,
+Florida,,Toluene,true
+Florida,,Toluene,
+Florida,108-88-3,,true
+Florida,108-88-3,,
+Florida,108-88-3,Toluene,
+Florida,,Toluene,
+Florida,108-88-3,,
+Florida,,Benzene,true
+Florida,71-43-2,,true
+Florida,71-43-2,,
+Florida,,Benzene,
+Florida,,Benzene,
+Florida,71-43-2,,
+Florida,71-43-2,Benzene,
+Florida,,Benzene,
+Florida,71-43-2,,
+,136777-61-2,,false
+,,m-Xylene & p-Xylene,false
+,,m-Xylene & p-Xylene,false
+,136777-61-2,,false
+,136777-61-2,m-Xylene & p-Xylene,false
+,,m-Xylene & p-Xylene,false
+,136777-61-2,,false
+Louisiana,,m-Xylene & p-Xylene,false
+,,m-Xylene & p-Xylene,false
+Louisiana,136777-61-2,,false
+,136777-61-2,,false
+,136777-61-2,,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+Louisiana,136777-61-2,,
+,136777-61-2,,
+,,m-Xylene & p-Xylene,
+Louisiana,,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+,136777-61-2,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+,136777-61-2,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+,,m-Xylene & p-Xylene,
+Louisiana,,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+Louisiana,136777-61-2,,
+,136777-61-2,,
+Louisiana,136777-61-2,m-Xylene & p-Xylene,
+,136777-61-2,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+,136777-61-2,,
+Louisiana,,m-Xylene & p-Xylene,
+,,m-Xylene & p-Xylene,
+Louisiana,136777-61-2,,
+,136777-61-2,,
+Mississippi,,m p-Xylene,true
+Mississippi,179601-23-1,,true
+Mississippi,179601-23-1,,
+Mississippi,,m p-Xylene,
+Mississippi,,m p-Xylene,
+Mississippi,179601-23-1,,
+Mississippi,179601-23-1,m p-Xylene,
+Mississippi,,m p-Xylene,
+Mississippi,179601-23-1,,
+Mississippi,,o-Xylene,true
+Mississippi,95-47-6,,true
+Mississippi,95-47-6,,
+Mississippi,,o-Xylene,
+Mississippi,,o-Xylene,
+Mississippi,95-47-6,,
+Mississippi,95-47-6,o-Xylene,
+Mississippi,,o-Xylene,
+Mississippi,95-47-6,,
+Mississippi,,Ethylbenzene,true
+Mississippi,100-41-4,,true
+Mississippi,100-41-4,,
+Mississippi,,Ethylbenzene,
+Mississippi,,Ethylbenzene,
+Mississippi,100-41-4,,
+Mississippi,100-41-4,Ethylbenzene,
+Mississippi,,Ethylbenzene,
+Mississippi,100-41-4,,
+Florida,,m p-Xylene,true
+Florida,179601-23-1,,true
+Florida,179601-23-1,,
+Florida,,m p-Xylene,
+Florida,,m p-Xylene,
+Florida,179601-23-1,,
+Florida,179601-23-1,m p-Xylene,
+Florida,,m p-Xylene,
+Florida,179601-23-1,,
+,,Chrysene,true
+,218-01-9,,true
+Florida,,Ethylbenzene,true
+Florida,100-41-4,,true
+Florida,,o-Xylene,true
+Florida,95-47-6,,true
+Florida,100-41-4,,
+Florida,,Ethylbenzene,
+Florida,95-47-6,,
+Florida,,o-Xylene,
+Florida,,Ethylbenzene,
+Florida,100-41-4,,
+Florida,100-41-4,Ethylbenzene,
+Florida,,Ethylbenzene,
+Florida,100-41-4,,
+Florida,,o-Xylene,
+Florida,95-47-6,,
+Florida,95-47-6,o-Xylene,
+Florida,,o-Xylene,
+Florida,95-47-6,,
+Louisiana,,o-Xylene,true
+Louisiana,95-47-6,,true

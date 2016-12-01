@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8" />
+
+<style>
+	#wrapper {
+	   position: relative;
+	   float: left;
+	   top: 20px;
+	   font-family: sans-serif;
+	   font-size: 10px;
+	}
+
+	#tooltip{
+		font-family: sans-serif;
+		font-size: 14px;
+		font-weight: bold;
+		color:black;
+	}
+
+</style>
+	
+<body>
+
+Parallel Coordinates Rule Plot
+
+<!--
+
+2016-11-29<br><br>
+Parallel Coordinates Rule Plot with Interval Attribute Midpoints and Cell Omission using Hidden Segments<br><br>
+Inspired by Mostapha Roudsari, Jason Davies.<br>
+Supports "Q" (non-date non-percent quantitative scalar or interval), "C" (categorical), "DQ" (date quantitative, i.e. date interval), "PQ" (percent quantitative) attributes. Interval attributes are supported by plotting midpoint and requires that a cell value is of the form "a...b", where a and b are scalars or dates.<br>
+When a cell is missing (i.e., equal to empty string), we don't plot line segments for the row involving the axis for which the cell is missing.<br>
+"start" and "end" integer parameters and a "config_path" string parameter for query string are accepted.<br>
+Supports having hidden segments for when we have a missing cell for an axis, which appear as dashed gray lines.<br>
+Has fast segment-cursor-intersection detection.<br>
+Remember to enable CORS for off-line use.<br>
+Reads data from "a.csv" (for rule antecedents) and "c.csv" (for rule consequents). Data for each row in antecedent and consequent CSV files are assumed to be disjoint.<br>
+First two lines of data files are title row and attribute type row.<br>
+Dates are of the form MM/DD/YYYY HH:MM AM/PM +/-hhmm", where "HH" refers to 12-hour-based hour, "AM/PM" is either "AM" or "PM", "+/-" is either "+" or "-", and "+/-hhmm" refers to timezone offset.<br>
+Config. file three lines give paths to antecedent CSV file, consequent CSV file, and support/confidence CSV file.<br>
+Support/confidence file has one non-value row; it has a title row. It has two columns; the first is for support, the second is for confidence.<br><br>
+
+-->
+
+<div id="content">
+</div>
+
+<script src="jquery-3.1.0.js" charset="utf-8"></script>
+
+<script src="d3.v3.js" charset="utf-8"></script>
+
+<script src="jshashtable.js" charset="utf-8"></script>
+
+<link rel="stylesheet" type="text/css" href="par_coords.css">
+<script src = "par_coords.js"></script>
+
+<!-- change width here -->
+<div id="wrapper" class="par_coords" style="width:200%; height:420px"></div>
+		
+<script>
+
+EMPTY_STR = ""
+
+COLUMN_WIDTH = 250
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+var config_file_text = null
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    // rawFile.open("GET", file, false);
+    rawFile.open("GET", file, true);
+    rawFile.responseType = "text"
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                config_file_text = allText
+		configLoaded()
+		// console.log(allText)
+		// alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+// start_str and end_str contain string value of "start" and "end" in query string, respectively, and can be null
+
+var start_str = getParameterByName("start")
+var end_str = getParameterByName("end")
+
+var config_path = getParameterByName("config_path")
+
+var have_config_path = config_path != null
+
+var next_start = 0
+
+if (start_str == null) {
+  next_start = 0
+} else {
+  next_start = parseInt(start_str)
+}
+
+var next_end = 0
+
+if (end_str == null) {
+  next_end = next_start + 10 - 1
+} else {
+  next_end = parseInt(end_str)
+}
+
+var p_indices = null
+var dr_indices = null
+
+var column_is_percent_type_list = []
+
+var column_is_date_range_type_list = []
+
+var a_csv_path = null
+var c_csv_path = null
+var sc_csv_path = null
+
+if (have_config_path == true) {
+
+  readTextFile(config_path)
+
+} else {
+
+  configLoaded()
+
+}
+
+function configLoaded() {
+
+if (have_config_path == true) {
+
+  var text = config_file_text
+
+  var lines = text.match(/^.*((\r\n|\n|\r)|$)/gm);
+
+  // console.log(config_file_text)
+
+  // console.log(lines)
+
+  /*
+
+  <zero-indexed percent column indices separated by spaces>
+  <zero-indexed date range column indices separated by spaces>
+
+  */
+
+  /*
+
+  p_indices_line = lines[0]
+  dr_indices_line = lines[1]
+
+  p_indices = p_indices_line.split(" ").map(function(x) { return Number.parseInt(x); }).filter(function(x) { return isNaN(x) == false; })
+
+  dr_indices = dr_indices_line.split(" ").map(function(x) { return Number.parseInt(x); }).filter(function(x) { return isNaN(x) == false; })
+
+  console.log("p. and d. r. indices", p_indices, dr_indices)
+
+  */
+
+  a_csv_path = lines[0]
+  c_csv_path = lines[1]
+  sc_csv_path = lines[2]
+  
+} else {
+  a_csv_path = "a.csv"
+  c_csv_path = "c.csv"
+  sc_csv_path = "sc.csv"
+}
+
+// var results_data = null
+
+// var sc_data = null
+
+// var rules_text = ""
+
+// console.log(next_start, next_end)
+
+// d3.csv("results.csv", function(data) {
+// d3.csv("a.csv", function(data) {
+d3.csv(a_csv_path, function(data) {
+
+  column_type_str_list = d3.values(data[0])
+
+  // console.log(column_type_str_list)
+
+  p_indices = column_type_str_list.map(function(x, i) { return (x === "PQ") ? i : null }).filter(function(x) { return x != null })
+
+  dr_indices = column_type_str_list.map(function(x, i) { return (x === "DQ") ? i : null }).filter(function(x) { return x!= null })
+
+  // console.log(p_indices)
+
+  // console.log(data)
+
+  next_start = Math.min(data.length - 1 - 1, next_start)
+  next_end = Math.min(data.length - 1 - 1, next_end)
+
+// console.log(next_start, next_end, data.length)
+
+var next_start_shifted = next_start + 1
+
+var next_end_shifted = next_end + 1
+
+$("#content").html("Showing results " + next_start_shifted.toString() + " to " + next_end_shifted.toString() + ".")
+
+})
+
+// console.log(n)
+
+var SHOW_COLOR_FOR_CATEGORICAL_COLUMNS = true
+
+var quantitative_color_set = d3.scale.linear()
+	.range(["#3182bd", "#f33"]);
+
+var categorical_color_set = d3.scale.category10()
+
+var a_data = null
+
+var c_data = null
+
+var column_num_to_str_value_to_alphabetical_place_num_dict_dict = {}
+
+// d3.csv("a.csv", function(data) {
+d3.csv(a_csv_path, function(data) {
+
+column_names = d3.keys(data[0])
+
+old_column_names = column_names
+
+column_name_to_column_num_dict = {}
+
+// console.log(d3.values(data[0]))
+
+column_is_quant_type_list = column_type_str_list.map(function(str) { 
+  if (str === "Q" || str === "DQ" || str === "PQ") return true; else if (str === "C") return false; })
+
+// console.log(column_is_quant_type_list)
+
+column_names.forEach(function(x) { column_is_percent_type_list.push(false); })
+
+column_names.forEach(function(x) { column_is_date_range_type_list.push(false); })
+
+p_indices.forEach(function(x) { column_is_percent_type_list[x] = true; })
+
+dr_indices.forEach(function(x) { column_is_date_range_type_list[x] = true; })
+
+// console.log(p_indices, dr_indices)
+
+// console.log(column_is_percent_type_list, column_is_date_range_type_list)
+
+a_data = data.slice(1, data.length)
+
+// d3.csv("c.csv", function(data) {
+d3.csv(c_csv_path, function(data) {
+
+c_data = data.slice(1, data.length)
+
+// load default chart
+
+// d3.csv("results.csv", function(data) {
+
+a_data = a_data.slice(next_start, next_end + 1)
+
+c_data = c_data.slice(next_start, next_end + 1)
+
+// data = data.slice(next_start, next_end + 1)
+
+curr_data = []
+
+num_sliced_rows = a_data.length
+
+row_set_to_count_dict = new Hashtable()
+
+function Row(k_v_obj) {
+
+  this.k_v_obj = k_v_obj
+
+}
+
+Row.prototype.equals = function(obj) {
+
+  result = true
+
+  result = result && (obj instanceof Row)
+
+  if (result == false) return false
+
+  for(k in Array.from(new Set(d3.keys(this.k_v_obj) + d3.keys(obj.k_v_obj)))) {
+    if (this.k_v_obj[k] != obj.k_v_obj[k]) {
+      result = false
+      break
+    }
+  }
+
+  return result
+
+}
+
+// row_set_to_count_dict[new Row({'a': 1})] = 1
+
+// console.log(row_set_to_count_dict[new Row({'a': 1})])
+
+for (var i = 0; i < num_sliced_rows; i++) {
+
+  a_row = a_data[i]
+
+  c_row = c_data[i]
+
+  row = {}
+
+  for (column_name of column_names) {
+
+    a_cell = a_row[column_name]
+
+    c_cell = c_row[column_name]
+
+    cell = null
+
+    if (a_cell === EMPTY_STR && c_cell === EMPTY_STR) {
+
+      // continue
+
+      cell = EMPTY_STR
+
+    } else if (a_cell === EMPTY_STR) {
+
+      cell = c_cell
+
+    } else if (c_cell === EMPTY_STR) {
+
+      cell = a_cell
+
+    } else {
+
+      cell = a_cell
+
+    }
+
+    row[column_name] = cell
+
+  }
+
+  // console.log(row)
+
+  // collapse rules into item-sets
+
+  next_row = new Row(row)
+
+  if (!(row_set_to_count_dict.containsKey(next_row))) {
+
+    row_set_to_count_dict.put(next_row, 1)
+
+  } else {
+
+    row_set_to_count_dict.put(next_row, row_set_to_count_dict.get(next_row), 1)
+
+  }
+
+  if (row_set_to_count_dict.get(next_row) == 1) {
+
+    curr_data.push(row)
+
+  }
+
+  // console.log(d3.keys(row), curr_row_set)
+
+}
+
+// console.log(curr_data)
+
+data = curr_data
+
+next_data = []
+
+// column_names = d3.keys(data[0])
+
+// num_columns = column_names.length
+
+// console.log(column_names)
+
+// console.log("hello")
+
+column_name_to_presence_dict = {}
+
+for (column_name of column_names) {
+
+  // console.log(column_name)
+
+  column_name_to_presence_dict[column_name] = false
+
+}
+
+// console.log(data)
+
+for (column_name of column_names) {
+
+  for (row of data) {
+
+    // console.log(row[column_name])
+
+    if (row[column_name] != EMPTY_STR) {
+      column_name_to_presence_dict[column_name] = true
+      break
+    }
+  }
+
+}
+
+// console.log(column_name_to_presence_dict)
+
+next_column_names = []
+
+for (column_name of column_names) {
+
+  // console.log(column_name)
+
+  if (column_name_to_presence_dict[column_name] == true) {
+    next_column_names.push(column_name)
+  }
+
+}
+
+next_num_column_names = next_column_names.length
+
+width_str = (COLUMN_WIDTH * next_num_column_names).toString() + "px"
+
+$("#wrapper").attr("style", "width:" + width_str + "; height:420px")
+
+column_names = next_column_names
+
+// console.log(column_names)
+
+for (var i = 0; i < column_names.length; i++) {
+  column_name = column_names[i]
+  column_name_to_column_num_dict[column_name] = i
+}
+
+for (row of data) {
+  next_row = {}
+  // console.log(row)
+  for (column_name of next_column_names) {
+    next_row[column_name] = row[column_name]
+  }
+  next_data.push(next_row)
+}
+
+// console.log(next_data)
+
+// console.log(d3.values(data[0]))
+
+// console.log(column_type_str_list)
+
+// console.log(column_name_to_presence_dict)
+
+// console.log(old_column_names)
+
+condensed_column_is_quant_type_list = old_column_names
+	.map(function(str, j) { 
+		type_str = column_type_str_list[j]
+		// console.log(j, type_str)
+		// BL - date range counts as quantitative
+		if (type_str === "Q" || type_str === "DQ" || type_str === "PQ") return true; else if (type_str === "C") return false; })
+	.filter(function(str, i) {
+		column_name = old_column_names[i]
+		return column_name_to_presence_dict[column_name] == true; })
+
+// console.log(condensed_column_is_quant_type_list)
+
+condensed_column_is_percent_type_list = column_is_percent_type_list
+	.filter(function(x, i) {
+		column_name = old_column_names[i]
+		return column_name_to_presence_dict[column_name] == true })
+
+// console.log(old_column_names, column_is_date_range_type_list, column_name_to_presence_dict)
+
+condensed_column_is_date_range_type_list = column_is_date_range_type_list
+	.filter(function(x, i) {
+		column_name = old_column_names[i]
+		return column_name_to_presence_dict[column_name] == true })
+
+// console.log(condensed_column_is_percent_type_list)
+
+// console.log(condensed_column_is_date_range_type_list)
+
+data = next_data
+
+for (var i = 0; i < column_names.length; i++) {
+
+  column_num_to_str_value_to_alphabetical_place_num_dict_dict[i] = {}
+
+}
+
+for (var i = 0; i < column_names.length; i++) {
+
+  str_value_list = []
+  for (row of data) {
+    next_row = d3.values(row)
+    curr_str = next_row[i]
+    str_value_list.push(curr_str)
+  }
+  str_value_list = Array.from(new Set(str_value_list))
+  // console.log(str_value_list)
+  str_value_list.sort(function(a, b) { return a < b; })
+  str_value_list.forEach(function(x, j) { 
+      column_num_to_str_value_to_alphabetical_place_num_dict_dict[i][x] = j
+    })
+}
+
+// console.log(column_name_to_presence_dict)
+
+// console.log(next_start, next_end + 1)
+
+// console.log(data)
+
+// collect text for first column to adjust left margin
+var firstCell = data.map(function(d){return d3.values(d)[0]});
+
+// find the longest text size in the first row to adjust left margin
+var textLength = 0;
+firstCell.forEach(function(d){
+	if (d.length > textLength) textLength = d.length;
+});
+	
+
+// get parallel coordinates
+graph = d3.parcoords({"condensed_column_is_quant_type_list": condensed_column_is_quant_type_list, "column_name_to_column_num_dict": column_name_to_column_num_dict, "condensed_column_is_date_range_type_list": condensed_column_is_date_range_type_list, "condensed_column_names": column_names, "condensed_column_is_percent_type_list": condensed_column_is_percent_type_list})('#wrapper')
+	.data(data)
+		.margin({ top: 30, left: 3 * textLength, bottom: 40, right: 0 })
+		.alpha(0.6)
+		.mode("queue")
+		.rate(5)
+		.render()
+		.brushMode("1D-axes")  // enable brushing
+		//.reorderable() // I removed this for now as it can mess up with tooltips
+		.interactive()
+		// .setIsQuantFlags(condensed_column_is_quant_type_list)
+		// .setIsPercentFlags(condensed_column_is_percent_type_list)
+
+// BL - pre-process rows so that we are able to get condensed axis indices
+
+var row_index_to_post_cull_index_to_overall_index_dict_dict = {}
+
+var curr_data = graph.data()
+
+// console.log(curr_data)
+
+keys = graph.dimensions()
+
+// console.log(keys)
+
+
+
+function getRightBorder(row, magic_word) {
+
+  var result = getRightBorderHelper(row, magic_word, 0, [])
+
+  // console.log(result)
+
+  var next_partial_result = result[0]
+  var result_is_null = result[1]
+  var chain_size = result[2]
+
+  return next_partial_result.reverse()
+
+}
+
+function getRightBorderHelper(row, magic_word, i, partial_result) {
+
+  if (row.length == 0) {
+    return [null, true, 0]
+  } else if (row.length - 1 == i) {
+    partial_result.push(row.length - 1)
+    return [partial_result, false, (row[i] === magic_word) ? 1 : 0]
+  } else {
+    var curr_element = row[i]
+    var prev_element = null
+    if ((i + 1) <= (row.length - 1)) {
+      prev_element = row[i + 1]
+    }
+    /*
+    if (row.length - 1 == i + 1) {
+      if (row[i + 1] === magic_word) {
+        chain_size += 1
+      }
+    }
+    */
+    // if we get to this logic, we already have at least one item in partial_result
+    // var next_chain_size = ((prev_element != null && prev_element === magic_word && !(curr_element === magic_word))) ? (chain_size + 1) : 0
+    // var next_chain_size = (prev_element != null && prev_element === magic_word) ? (chain_size + 1) : 0
+    var result = getRightBorderHelper(row, magic_word, i + 1, partial_result)
+    var chain_size = result[2] + ((row[i] === magic_word) ? 1 : 0)
+    var next_chain_size = (row[i] === magic_word) ? chain_size : 0
+    // console.log(partial_result[row.length - i - 2], chain_size, curr_element)
+    var next_partial_result = result[0]
+    var prev_result_value = next_partial_result[row.length - i - 2]
+    if (curr_element === magic_word) {
+      next_partial_result.push(prev_result_value)
+    } else {
+      next_partial_result.push(prev_result_value - 1 - chain_size)
+    }
+    return [next_partial_result, false, next_chain_size]
+  }
+      
+}
+
+// console.log(getRightBorder(["a", "", "b", "c"], ""))
+
+// want right border, not left border
+
+for (var i = 0; i < curr_data.length; i++) {
+  var row = curr_data[i]
+  // var post_cull_index = 0
+  var post_cull_index_to_overall_index_dict = {}
+  // BL - we use magic word "EMPTY"
+  var overall_indices = getRightBorder(keys.map(function(x) { return row[x] }), EMPTY_STR)
+  // console.log("1:", overall_indices)
+  for (var j = 0; j < keys.length; j++) {
+    var overall_index = overall_indices[j]
+    // var key = keys[j]
+    post_cull_index_to_overall_index_dict[j] = overall_index
+    // BL - we use magic word "EMPTY"
+    /*
+    if (!(row[key] === "EMPTY")) {
+      post_cull_index += 1
+    }
+    */
+  }
+  // console.log("2:", post_cull_index_to_overall_index_dict)
+  // console.log(overall_index_to_post_cull_index_dict)
+  row_index_to_post_cull_index_to_overall_index_dict_dict[i] = post_cull_index_to_overall_index_dict
+}
+
+// BL - find inverse of function ritpcitoidd
+
+var row_index_to_overall_index_to_post_cull_index_dict_dict = {}
+
+// graph.ritpcitoidd = row_index_to_post_cull_index_to_overall_index_dict_dict
+
+for (var i = 0; i < curr_data.length; i++) {
+  var row = row_index_to_post_cull_index_to_overall_index_dict_dict[i]
+  var overall_index_to_post_cull_index_dict = {}
+  var prev_post_cull_index = null
+  var curr_overall_index = 0
+  for (var j = 0; j < keys.length; j++) {
+    var post_cull_index = row[j]
+    if (post_cull_index != prev_post_cull_index && prev_post_cull_index != null) {
+      // change seen
+      curr_overall_index += 1
+    } else {
+      // sameness seen
+    }
+    prev_post_cull_index = post_cull_index
+    overall_index_to_post_cull_index_dict[j] = curr_overall_index
+  }
+  // console.log(overall_index_to_post_cull_index_dict)
+  row_index_to_overall_index_to_post_cull_index_dict_dict[i] = overall_index_to_post_cull_index_dict
+}
+    
+graph.ritoitpcidd = row_index_to_overall_index_to_post_cull_index_dict_dict
+
+
+
+// console.log(graph.ritoitpcidd)
+
+// graph.axisDots(data)
+
+// add instruction text
+var instructions = "• Drag around axis to begin brush. • Click axis to clear brush. • Click a label to color data based on axis values. • Hover on each line to highlight."
+
+d3.select("#wrapper svg").append("text")
+	.text(instructions)
+	.attr("text-anchor", "middle")
+	.attr("text-decoration", "overline")
+	.attr("transform", "translate(" + graph.width()/2 + "," + (graph.height()-5) + ")");
+//	.attr("transform", "translate(" + (graph.margin()["left"] + instructions.length * 3) + "," + (graph.height()-5) + ")");
+
+// set the initial coloring based on the 3rd column
+// update_colors(d3.keys(data[0])[2]);
+update_colors(column_names[0])
+
+ // click label to activate coloring
+graph.svg.selectAll(".dimension")
+    .on("click", update_colors)
+    .selectAll(".label")
+    	.style("font-size", "14px"); // change font sizes of selected lable
+
+//add hover event
+d3.select("#wrapper svg")
+	.on("mousemove", function() {
+	    var mousePosition = d3.mouse(this);			    
+	    highlightLineOnClick(mousePosition, true); //true will also add tooltip
+	})
+	.on("mouseout", function(){
+		cleanTooltip();
+		graph.unhighlight();
+	});
+	
+// end of csv call
+
+});
+
+// end of csv call
+
+});
+
+/*
+
+function min(l) {
+  return minHelper(l, 0, null)
+}
+
+function minHelper(l, i, curr_min) {
+  while (true) {
+    if (i == l.length) {
+      return curr_min;
+    } else {
+      curr_el = l[i];
+      if (curr_min == null || curr_el < curr_min) {
+        // return minHelper(l, i + 1, curr_el);
+        l = l; i = i + 1; curr_min = curr_el;
+        continue;
+      } else {
+        // return minHelper(l, i + 1, curr_min);
+        l = l, i = i + 1, curr_min = curr_min;
+        continue;
+      }
+    }
+  }
+}
+
+function max(l) {
+  return maxHelper(l, 0, null)
+}
+
+function maxHelper(l, i, curr_max) {
+  while (true) {
+    if (i == l.length) {
+      return curr_max;
+    } else {
+      curr_el = l[i];
+      if (curr_max == null || curr_el > curr_max) {
+        // return maxHelper(l, i + 1, curr_el);
+        l = l; i = i + 1; curr_max = curr_el;
+        continue;
+      } else {
+        // return maxHelper(l, i + 1, curr_max);
+        l = l; i = i + 1; curr_max = curr_max;
+        continue;
+      }
+    }
+  }
+}
+
+*/
+
+// update color and font weight of chart based on axis selection
+// modified from here: https://syntagmatic.github.io/parallel-coordinates/
+function update_colors(dimension) { 
+	// change the fonts to bold
+	graph.svg.selectAll(".dimension")
+		.style("font-weight", "normal")
+		.filter(function(d) { return d == dimension; })
+			.style("font-weight", "bold");
+
+	var dimension_column_num = column_name_to_column_num_dict[dimension]
+
+	// change color of lines
+	// set domain of color scale
+        // BL - we use magic word "EMPTY"
+	var values = graph.data().filter(function(d) { /* console.log(d[k]); */ return !(d[dimension] === EMPTY_STR) }).map(function(d){
+          // return parseFloat(d[dimension])
+          var unscaled_y = idempotentParsePossibleIntervalStrIntoMidpoint(d[dimension], graph, dimension)
+          var next_unscaled_y = intervalStrToMidpoint([null, unscaled_y, d[dimension], dimension], graph);
+	  // console.log(intervalStrToMidpoint)
+	  // console.log(dimension_column_num, dimension)
+	  if (graph.condensed_column_is_quant_type_list()[dimension_column_num] == true) {
+		  // console.log("1", condensed_column_is_date_range_type_list[dimension_column_num], next_unscaled_y, d[dimension], unscaled_y, parseFloat(unscaled_y))
+		  // var curr_unscaled_y = condensed_column_is_date_range_type_list[dimension_column_num] ? unscaled_y : unscaled_y
+		  if (condensed_column_is_date_range_type_list[dimension_column_num] == true) {
+			return unscaled_y
+		  } else {
+			return isNaN(parseFloat(unscaled_y)) ? 0 : next_unscaled_y
+		  }
+	          // return isNaN(parseFloat(unscaled_y)) ? 0 : next_unscaled_y;
+	  } else {
+		return column_num_to_str_value_to_alphabetical_place_num_dict_dict[dimension_column_num][d[dimension]]
+	  }
+        });
+	// console.log(column_num_to_str_value_to_alphabetical_place_num_dict_dict)
+        // BL - possibly a bug here where input to d3.min() and d3.max() is collection of numeric strings
+        min_value = d3.min(values.map(function(x, i) { 
+		dimension_column_num = column_name_to_column_num_dict[dimension]
+		if (graph.condensed_column_is_quant_type_list()[dimension_column_num] == true) {
+			// console.log("2", x, parseFloat(x))
+		  if (condensed_column_is_date_range_type_list[dimension_column_num] == true) {
+			return x
+		  } else {
+			return isNaN(parseFloat(x)) ? 0 : parseFloat(x)
+		  }
+		} else {
+			return x
+		}
+		}))
+        max_value = d3.max(values.map(function(x, i) { 
+		dimension_column_num = column_name_to_column_num_dict[dimension]
+		if (graph.condensed_column_is_quant_type_list()[dimension_column_num] == true) {
+			// console.log("3")
+		  if (condensed_column_is_date_range_type_list[dimension_column_num] == true) {
+			return x
+		  } else {
+			return isNaN(parseFloat(x)) ? 0 : parseFloat(x)
+		  }
+		} else {
+			return x
+		}
+		}))
+	/*
+	if (condensed_column_is_date_range_type_list[dimension_column_num] == true) {
+		console.log(values, min_value, max_value)
+	}
+	*/
+	var color_set = null
+	dimension_column_num = column_name_to_column_num_dict[dimension]
+	if (graph.condensed_column_is_quant_type_list()[dimension_column_num] == true) {
+		color_set = quantitative_color_set
+	} else if (graph.condensed_column_is_quant_type_list()[dimension_column_num] == false) {
+		color_set = categorical_color_set
+	}
+	color_set.domain([min_value, max_value]);
+        // console.log([d3.min(values), d3.max(values), values]);
+	// color_set.domain([min(values), max(values)]);
+        // console.log([min(values), max(values), values]);
+	
+	// change colors for each line
+	graph.color(function(d){
+          // return color_set([d[dimension]])
+          // return color_set([intervalStrToMidpoint(d[dimension], graph)]);
+
+          // console.log(d, dimension)
+
+          // dimension_column_num = column_name_to_column_num_dict[dimension]
+
+          // BL - we use magic word "EMPTY"
+          if (d[dimension] === EMPTY_STR) {
+            return color_set(d3.min(values))
+	  } else if (graph.condensed_column_is_quant_type_list()[dimension_column_num] == false) {
+	    // console.log(d[dimension])
+	    // BL - note that even if we are categorical, lack of a value for the column gets treated differently
+	    // return color_set([100])
+	    var value = column_num_to_str_value_to_alphabetical_place_num_dict_dict[dimension_column_num][d[dimension]]
+	    // console.log(value)
+	    if (SHOW_COLOR_FOR_CATEGORICAL_COLUMNS == true) {
+		    return color_set([value])
+	    } else {
+		    return color_set([0])
+	    }
+
+          } else {
+            var unscaled_y = idempotentParsePossibleIntervalStrIntoMidpoint(d[dimension], graph, dimension)
+            var next_unscaled_y = intervalStrToMidpoint([null, next_unscaled_y, d[dimension], dimension], graph)
+	    /*
+	    if (condensed_column_is_date_range_type_list[dimension_column_num] == true) {
+		return color_set([next_unscaled_y])
+	    } else {
+                return color_set([isNaN(parseFloat(unscaled_y)) ? 0 : next_unscaled_y])
+	    }
+	    */
+            return color_set([isNaN(parseFloat(unscaled_y)) ? 0 : next_unscaled_y])
+          }
+        }).render();
+};
+
+
+// BL - this is being used to a limited extent, and without special treatment, d[1] would sometimes not be a number
+
+// Add highlight for every line on click
+function getCentroids(data){
+	// this function returns centroid points for data. I had to change the source
+	// for parallelcoordinates and make compute_centroids public.
+	// I assume this should be already somewhere in graph and I don't need to recalculate it
+	// but I couldn't find it so I just wrote this for now
+	var margins = graph.margin();
+	// var graphCentPts = [];
+        // BL - made a change here
+	var graphCentPts = [[], []];
+
+	data.forEach(function(d, i){
+
+              // console.log(graph.compute_centroids(d))
+		
+                // rid ourselves of odd-indexed items (for virtual axes) in centroid list; 
+		// keep if even
+		var initCenPts = graph.compute_centroids(d).filter(function(d, i_prime) { return i_prime % 2 == 0 });
+		// console.log(margins)
+                // console.log(initCenPts.length)
+		// BL - this is important - we add margins["left"] to x
+		// move points based on margins
+		var cenPts = initCenPts.map(function(d){
+			return [d[0] + margins["left"], d[1] + margins["top"], d[2]]; 
+		});
+
+                // BL - added tag for row index
+		// graphCentPts.push(cenPts);
+		graphCentPts[0].push(cenPts);
+                graphCentPts[1].push(i)
+	});
+
+        // console.log("look here:", graphCentPts)
+
+	return graphCentPts;
+}
+
+function getActiveData(){
+	// I'm pretty sure this data is already somewhere in graph
+	if (graph.brushed()!=false) return graph.brushed();
+	return graph.data();
+}
+
+function isOnLine(startPt, endPt, testPt, tol){
+        // console.log(startPt, endPt, testPt, tol)
+        /*
+        if (typeof endPt === "undefined") {
+          console.log("end pt. is undefined")
+        }
+        */
+	// check if test point is close enough to a line
+	// between startPt and endPt. close enough means smaller than tolerance
+	var x0 = testPt[0];
+	var	y0 = testPt[1];
+	var x1 = startPt[0];
+	var	y1 = startPt[1];
+	var x2 = endPt[0];
+	var	y2 = endPt[1];
+	var Dx = x2 - x1;
+	var Dy = y2 - y1;
+	var delta = Math.abs(Dy*x0 - Dx*y0 - x1*y2+x2*y1)/Math.sqrt(Math.pow(Dx, 2) + Math.pow(Dy, 2)); 
+	//console.log(delta);
+	if (delta <= tol) return true;
+	return false;
+}
+
+function findAxes(testPt, cenPts){
+	// finds between which two axis the mouse is
+	var x = testPt[0];
+	var y = testPt[1];
+
+        // console.log(cenPts)
+
+	// make sure it is inside the range of x
+	if (cenPts[0][0] > x) return false;
+	if (cenPts[cenPts.length-1][0] < x) return false;
+
+	// find between which segment the point is
+	for (var i=0; i<cenPts.length; i++){
+		if (cenPts[i][0] > x) return i;
+	}
+}
+
+function cleanTooltip(){
+	// removes any object under #tooltip is
+	graph.svg.selectAll("#tooltip")
+    	.remove();
+}
+
+function addTooltip(clicked, clickedCenPts){
+	
+	// add tooltip to multiple clicked lines
+    var clickedDataSet = [];
+    var margins = graph.margin()
+
+    // get all the values into a single list
+    // I'm pretty sure there is a better way to write this in Javascript
+    // BL - we make assumption that "clicked" is non-empty
+    for (var i=0; i<clicked.length; i++){
+        var column_names = d3.keys(clicked[i]).filter(function (key) { 
+          // console.log(clicked[i][key])
+          // BL - we use magic word "EMPTY"
+          return clicked[i][key] !== EMPTY_STR
+	  // return true;
+        })
+    	for (var j=0; j<clickedCenPts[i].length; j++){
+    		// var text = d3.values(clicked[i])[j];
+                var column_name = column_names[j]
+                        var text = clicked[i][column_name]
+			// if column is numeric, consider it an interval
+			// console.log(text);
+  			// not clean at all!
+  			var x = clickedCenPts[i][j][0] - margins.left;
+  			var y = clickedCenPts[i][j][1] - margins.top;
+                        // BL - we use magic word "EMPTY"
+                        // if (!(text === "EMPTY")) {
+  			  clickedDataSet.push([x, y, text]);
+                        // }
+		}
+	};
+
+    // console.log(clickedDataSet)
+
+	// add rectangles
+	var fontSize = 14;
+	var padding = 2;
+	var rectHeight = fontSize + 2 * padding; //based on font size
+
+	graph.svg.selectAll("rect[id='tooltip']")
+        	.data(clickedDataSet).enter()
+        	.append("rect")
+        	.attr("x", function(d) {
+                  // console.log("d:", d)
+		  if (d[2] === undefined) return 0;
+                  var val = d[0] - d[2].length * 5;
+                  /*
+                  if (typeof d[2] == "string") {
+                    console.log("encountered a problem");
+                  }
+                  */
+                  return val;
+                })
+                        // BL - added functionality for 'interval' type; this is very rough
+			.attr("y", function(d) { /* console.log(d);  var val = intervalStrToMidpoint([d, graph); var result = val - rectHeight + 2 * padding; 
+if (isNaN(result)) 
+  console.log("hi"); 
+return result; */
+
+/*
+
+if (isNaN(d[1] - rectHeight + 2 * padding) == true) {
+  console.log("encountered an issue");
+}
+
+*/
+
+ // return d[1] - rectHeight + 2 * padding;
+
+// var unscaled_y = idempotentParsePossibleIntervalStrIntoMidpoint(d[2], pc)
+
+// var val = intervalStrToMidpoint([d[0], unscaled_y, d[2], null], pc, true)
+
+// could have a problem here; d[1] better not be NaN
+
+return d[1] - rectHeight + 2 * padding;
+
+})
+			.attr("rx", "2")
+			.attr("ry", "2")
+			.attr("id", "tooltip")
+			.attr("fill", "grey")
+			.attr("opacity", 0.9)
+			.attr("width", function(d){if (d[2] === undefined) return 0; else return d[2].length * 10;})
+			.attr("height", rectHeight);
+
+	// add text on top of rectangle
+	graph.svg.selectAll("text[id='tooltip']")
+    	.data(clickedDataSet).enter()
+    		.append("text")
+			.attr("x", function(d) { return d[0];})
+			// .attr("y", function(d) { return d[1]; })
+                        .attr("y", function (d) { /* var val = intervalStrToMidpoint(d[1], graph); var result = val; if (isNaN(result)) console.log("hi"); return result; */ return d[1]; })
+			.attr("id", "tooltip")
+			.attr("fill", "white")
+			.attr("text-anchor", "middle")
+			.attr("font-size", fontSize)
+        	.text( function (d){ return d[2];})    
+}
+
+function getClickedLines(mouseClick){
+    var clicked = [];
+    var clickedCenPts = [];
+
+	// find which data is activated right now
+	var activeData = getActiveData();
+
+	// find centroid points
+	var graphCentPts = getCentroids(activeData);
+        // console.log(graphCentPts)
+
+    // BL - fixed a bug here
+
+    // BL - added code
+
+    if (graphCentPts.length==0) return false;
+
+    // find between which axes the point is
+    // BL - this is not fine because index returned is relative to graphCentPts[i]
+    // var axeNum = findAxes(mouseClick, graphCentPts[0]);
+    // if (!axeNum) return false;
+
+    // want index in [0, num_non_empty_axes)
+    // have axis_index in [0, num_axes)
+
+    // var column_names = d3.keys(graph.data()[0])
+
+    // console.log(column_names)
+
+    var x_scale = graph.xscale
+
+    var x_values = column_names.map(function(x) { return x_scale(x) + graph.margin()["left"] })
+
+    var artificial_centroids = x_values.map(function(x) { return [x, 0] })
+
+    // console.log(artificial_centroids)
+
+    var axis_index = findAxes(mouseClick, artificial_centroids)
+
+    // console.log(axis_index)
+
+    // console.log(graphCentPts)
+
+    // var axeNum = findAxes(mouseClick, graphCentPts[0])
+    // if (!axeNum) return false
+
+    if (!axis_index) return false
+
+    graphCentPts[0].forEach(function(d, i){
+            // console.log(d)
+            // BL - this could be way more efficient - we could do it once at beginning and accomodate differences afterwards
+            // BL - made it more efficient; effect is to obfuscate the code, however
+            // console.log(d)
+            // console.log("axis num:", axeNum2)
+            // console.log(i, axeNum)
+            // if (!axeNum) return
+            var i_prime = graphCentPts[1][i]
+            var axeNum = graph.ritoitpcidd[i_prime][axis_index]
+	    // console.log(axeNum, graph.ritoitpcidd[i_prime], i_prime, activeData)
+            // BL - made a change here; out-of-bounds status is dependent on non-culled axis selection
+            if (axeNum >= d.length || axeNum < 1) return
+            /*
+            if (!axis_index) return
+            if (axeNum >= graph.dimensions() || axeNum < 1) return
+            */
+            // var axeNum = axeNum2
+            /*
+            if (axeNum != axeNum2) {
+              console.log("found a problem", axeNum, axeNum2, d)
+            }
+            */
+            // var axeNum = axis_index
+            // console.log(i, axeNum)
+            // console.log(graph.ritoitpcidd[i_prime], axis_index, axeNum)
+            // axeNum = axis_index
+            // console.log(axeNum)
+            // console.log("d:", d)
+	    // console.log(d, i, activeData[i], axeNum - 1, axeNum)
+            // BL - problem with missing axes and filling in of gap
+	    if (isOnLine(d[axeNum - 1], d[axeNum], mouseClick, 2)){
+	    	clicked.push(activeData[i]);
+	    	clickedCenPts.push(graphCentPts[0][i]); // for tooltip
+	    }
+	});
+
+        // console.log(clicked, clickedCenPts)
+	
+	return [clicked, clickedCenPts]
+}
+
+
+function highlightLineOnClick(mouseClick, drawTooltip){
+	
+	var clicked = [];
+    var clickedCenPts = [];
+	
+	clickedData = getClickedLines(mouseClick);
+
+	if (clickedData && clickedData[0].length!=0){
+
+		clicked = clickedData[0];
+    	clickedCenPts = clickedData[1];
+
+	    // highlight clicked line
+	    graph.highlight(clicked);
+		
+		if (drawTooltip){
+			// clean if anything is there
+			cleanTooltip();
+	    	// add tooltip
+	    	addTooltip(clicked, clickedCenPts);
+		}
+
+	}
+};
+
+}
+
+// console.log(min([1, 2, 3, -1]));
+
+// console.log(max([1, 2, 3, -1]));
+
+</script>
+</body>

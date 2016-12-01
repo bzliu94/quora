@@ -1,0 +1,5 @@
+Adapted from http://opendata.socrata.com/Government/White-House-Visitor-Logs-annotated-/df8n-kd3j
+
+License: Public Domain
+
+For Quora Trend Analyzer problem at http://www.quora.com/CodesprintQuora/Quora-Trend-Analyzer-week-long-problem

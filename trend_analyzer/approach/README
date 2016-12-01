@@ -1,0 +1,182 @@
+2016-11-29
+
+Trend analyzer parts:
+
+1. DATA CLEANING
+
+2. INCOGNITO ANONYMIZATION
+
+3. QUANTITATIVE/CATEGORICAL ASSOCIATION RULE MINING
+
+4. PARALLEL COORDINATES RULE PLOT
+
+--
+
+Note: Some of these commands involve Pypy. Feel free to replace it with Python, though the scripts will run slower.
+
+--
+
+STEP ONE
+
+(From perspective of root folder.)
+
+cd tests/airsampling
+python airsampling_clean.py > airsampling_cleaned.csv
+
+cd ../..
+cd tests/hospital
+python hospital_clean.py > hospital_cleaned.csv
+
+cd ../..
+cd tests/whitehouse
+python whitehouse_clean.py > whitehouse_cleaned.csv
+
+(All three cases take short amounts of time.)
+
+--
+
+STEP TWO
+
+(From perspective of root folder.)
+
+cat config/anon_config.airsampling.in | pypy basic_incognito_with_suppression.py > tests/anon_tests/airsampling_anon.csv
+cat config/anon_config.hospital.in | pypy basic_incognito_with_suppression.py > tests/anon_tests/hospital_anon.csv
+cat config/anon_config.whitehouse.in | pypy basic_incognito_with_suppression.py > tests/anon_tests/whitehouse_anon.csv
+
+(First line takes one minute, second line takes 45 minutes, third line takes ten seconds.)
+
+--
+
+STEP THREE
+
+(From perspective of root folder.)
+
+cat config/rm_config.airsampling.in | pypy quant_cat_apriori.py
+cat config/rm_config.hospital.in | pypy quant_cat_apriori.py
+cat config/rm_config.whitehouse.in | pypy quant_cat_apriori.py
+
+(The three lines should take no longer than ten minutes total.)
+
+--
+
+STEP FOUR
+
+(From perspective of root folder.)
+
+Visit:
+
+ui.html?start=0&end=866&config_path=config/ui_config.airsampling.in
+ui.html?start=0&end=386&config_path=config/ui_config.hospital.in
+ui.html?start=0&end=432&config_path=config/ui_config.whitehouse.in
+
+(Remember to disable CORS.)
+
+--
+
+Conclusions we can draw from the plots
+
+Air-sampling: Certain states have different chemicals detected (e.g. with Louisiana having the most samples and with benzene detected for many states, but with PM2.5 specifically strongly associated with Louisiana).
+
+Hospital: High ratings for certain metrics beget high ratings for other metrics, certain states (e.g. CA, NY) for medical facilities consistently drew middling levels of high ratings.
+
+Whitehouse: Certain buildings are associated with particular room numbers, certain events drew large numbers of guest loggings, certain callers were most prolific, certain visitees were most common (e.g. POTUS).
+
+--
+
+Appendix A: Configuration file formats
+
+(paths are relative to root folder)
+
+ANONYMIZATION CONFIG. FILE
+
+<path to cleaned data-set csv>
+<do output num. suppressed tuples line and suppressed row 1-indexed indices line; 0 for no, 1 for yes>
+<num. of header lines to ignore and carry over>
+<k-anonymity k>
+<row suppression budget>
+<num. attributes>
+<num. quasi-identifier attributes>
+<line for 0th quasi-identifier attribute>
+...
+<line for last quasi-identifier attribute>
+
+Note that a line for a quasi-identifier is of the form:
+
+<index for quasi-identifier column> <capital pre-set type letter> <optional parameter for pre-set> <optional parameter for pre-set>
+
+Also, note that opting to output suppression detail two lines leads to them being added at the end of the output.
+
+See Appendix C for pre-set details.
+
+RULE MINING CONFIG. FILE
+
+<min_support> <max_support> <min_confidence> <R> <K> <r-int. pre-proc. prune support limit multiplier; is >= 0 and a safe value is one>
+<zero-indexed non-date and non-percent quantitative column indices separated by spaces>
+<zero-indexed categorical column indices separated by spaces>
+<zero-indexed date quantitative column indices separated by spaces; disjoint w.r.t. non-date non-percent quantitative column indices>
+<zero-indexed percent quantitative column indices separated by spaces; disjoint w.r.t. non-date non-percent quantitative column indices>
+<path to input anonymized data-set csv with a type row and a title row>
+<path to output antecedent csv with a title row and a quant/cat status row>
+<path to output consequent csv with a title row and a quant/cat status row>
+<path to output support/confidence-value csv with a title row>
+
+Note that min. support, max. support, min. confidence are between zero and one. R is to do with R-interesting and K is to do with K-completeness.
+
+See Appendix B for details about quantitative/categorical column status row.
+
+VISUALIZATION CONFIG. FILE
+
+<path to input antecedent csv with a title row and a quant/cat status row>
+<path to input consequent csv with a title row and a quant/cat status row>
+<path to input support/confidence-value csv with a title row>
+
+--
+
+Appendix B: Column types for visualization data
+
+Q: Non-date non-percent quantitative attribute
+C: Categorical attribute
+DQ: Date quantitative attribute
+PQ: Percent quantitative attribute
+
+--
+
+Appendix C: Pre-set types for anonymization columns
+
+Note that pre-sets are for determining single-attribute generalization structures.
+
+A: Divide into parts based on hyphens and asterisk parts from right to left. Levels are: ungeneralized, censor n' parts for 0 < n' < n from right to left, only first character unasterisked, fully suppressed. Involves n + 2 levels, where n is number of parts deep we at most plan to go.
+
+This pre-set takes an integer parameter n.
+
+B: Asterisk individual characters from right to left. Levels are: ungeneralized, censor last 0 < n' < n characters (allowing for variable length) from right to left, fully suppressed. Allows empty as a value. Involves n + 2 levels, where n is max. size of asterisked prefix.
+
+This pre-set takes a "True"/"False" parameter for doubling generalization costs.
+
+Also, it takes an optional integer parameter n describing max. prefix size.
+
+C: Asterisk wholly or not at all. Levels are: ungeneralized, fully suppressed. Allows empty as a value. Involves two levels.
+
+D: Meant for digit-based values. Asterisk individual characters from right to left with left-padding using zeroes for values shorter than provided number of digits expected. Can deal with values longer than parameter digit count. Involves m + 1 levels.
+
+This pre-set takes a num. digits integer parameter m.
+
+G: Forced full suppression. Involves one level.
+
+--
+
+Appendix D: Future directions
+
+In the future, it would probably be a good idea to try to reduce the number of rules generated. One approach would involve using Galois connection to reduce rules to min. antecedent and max-consequent form as a post-processing step or replacement algorithm.
+
+--
+
+Appendix E: Articles
+
+1. Agrawal and Srikant: Fast algorithms for mining association rules (1994)
+2. LeFevre, DeWitt, Ramakrishnan: Incognito: efficient full-domain k-anonymity (2005)
+3. Pasquier et al.: Generating a condensed representation for association rules (2005)
+4. Srikant and Agrawal: Mining quantitative association rules in large relational tables (1996)
+5. Srikant and Agrawal: Mining generalized association rules (1995)
+
+

@@ -1,0 +1,276 @@
+<html>
+<head>
+</head>
+<body>
+
+Rule Support and Confidence Listing
+
+<div id="content">
+</div>
+
+<div id="rules">
+</div>
+
+<!-- display rules with support and confidence in order given in results.csv and sc.csv -->
+<!-- read from query string rows with indices [start, end) using 0-indexed "start" and 0-indexed "end" -->
+
+<script src="jquery-3.1.0.js" charset="utf-8"></script>
+
+<script src="d3.v3.js" charset="utf-8"></script>
+
+<script>
+
+EMPTY_STR = ""
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+var config_file_text = null
+
+function readTextFile(file)
+{
+    var rawFile = new XMLHttpRequest();
+    // rawFile.open("GET", file, false);
+    rawFile.open("GET", file, true);
+    rawFile.responseType = "text"
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                var allText = rawFile.responseText;
+                config_file_text = allText
+		configLoaded()
+		// console.log(allText)
+		// alert(allText);
+            }
+        }
+    }
+    rawFile.send(null);
+}
+
+var a_csv_path = null
+var c_csv_path = null
+var sc_csv_path = null
+
+// start_str and end_str contain string value of "start" and "end" in query string, respectively, and can be null
+
+var start_str = getParameterByName("start")
+var end_str = getParameterByName("end")
+
+var config_path = getParameterByName("config_path")
+
+var have_config_path = config_path != null
+
+if (have_config_path == true) {
+
+  readTextFile(config_path)
+
+} else {
+
+  configLoaded()
+
+}
+
+function configLoaded() {
+
+if (have_config_path == true) {
+
+  var text = config_file_text
+
+  var lines = text.match(/^.*((\r\n|\n|\r)|$)/gm);
+
+  // console.log(config_file_text)
+
+  // console.log(lines)
+
+  a_csv_path = lines[0]
+  c_csv_path = lines[1]
+  sc_csv_path = lines[2]
+  
+} else {
+  a_csv_path = "a.csv"
+  c_csv_path = "c.csv"
+  sc_csv_path = "sc.csv"
+}
+
+var next_start = 0
+
+if (start_str == null) {
+  next_start = 0
+} else {
+  next_start = parseInt(start_str)
+}
+
+var next_end = 0
+
+if (end_str == null) {
+  next_end = next_start + 10 - 1
+} else {
+  next_end = parseInt(end_str)
+}
+
+var results_data = null
+
+var sc_data = null
+
+var rules_text = ""
+
+var a_data = null
+
+var c_data = null
+
+// d3.csv("a.csv", function(data) {
+
+d3.csv(a_csv_path, function(data) {
+
+a_data = data.slice(1, data.length)
+
+// d3.csv("c.csv", function(data) {
+
+d3.csv(c_csv_path, function(data) {
+
+c_data = data.slice(1, data.length)
+
+  next_start = Math.min(data.length - 1 - 1, next_start)
+  next_end = Math.min(data.length - 1 - 1, next_end)
+
+var next_start_shifted = next_start + 1
+
+var next_end_shifted = next_end + 1
+
+$("#content").html("Showing results " + next_start_shifted.toString() + " to " + next_end_shifted.toString() + ".")
+
+results_data = data
+
+// d3.csv("sc.csv", function(data) {
+
+d3.csv(sc_csv_path, function(data) {
+  sc_data = data
+
+  // console.log(sc_data)
+
+  // console.log(results_data)
+
+  // console.log(sc_data)
+
+  if (data.length == 0) {
+    return
+  }
+
+  var columns = d3.keys(results_data[0])
+  var rules = results_data
+  var sc_values = sc_data
+
+  // console.log(columns)
+
+  var num_columns = columns.length
+
+  // var rules_text
+
+  // console.log(next_start, next_end, sc_values)
+
+  for (var i = next_start; i <= next_end; i++) {
+
+    var antecedent = a_data[i]
+    var consequent = c_data[i]
+
+    // console.log(i)
+
+    // console.log(antecedent)
+
+    // var rule = rules[i]
+    var sc_value = sc_values[i]
+
+    var rule_text = ""
+
+    var rule_num = i + 1
+
+    rule_text += rule_num.toString() + ". "
+
+    support_value = sc_value["SUPPORT"]
+    confidence_value = sc_value["CONFIDENCE"]
+
+    antecedent_str_list = []
+    consequent_str_list = []
+
+    for (var j = 0; j < num_columns; j++) {
+
+      column = columns[j]
+
+      antecedent_cell_value = antecedent[column]
+      consequent_cell_value = consequent[column]
+
+      /*
+
+      // BL - using a magic word "EMPTY"
+
+      if (cell_value === EMPTY_STR) {
+        continue;
+      }
+
+      */
+
+      // console.log([column, cell_value])
+
+      if (antecedent_cell_value !== EMPTY_STR) {
+
+        antecedent_str_list.push(column + ": " + antecedent_cell_value)
+
+      }
+
+      if (consequent_cell_value !== EMPTY_STR) {
+
+        consequent_str_list.push(column + ": " + consequent_cell_value)
+
+      }
+
+      /*
+
+      if (j != num_columns - 1) {
+        rule_text += ", "
+      }
+
+      */
+
+    }
+
+    // console.log([support_value, confidence_value])
+
+    antecedent_text = antecedent_str_list.join(", ")
+
+    consequent_text = consequent_str_list.join(", ")
+
+    rule_text += antecedent_text + " => " + consequent_text
+
+    rule_text += "; support: " + support_value + ", confidence: " + confidence_value
+
+    rules_text += rule_text
+
+    if (i != next_end + 1 - 1) {
+      rules_text += "<br>"
+    }
+
+  }
+
+$("#rules").html("Rules:<br>" + rules_text)
+
+})
+
+})
+
+})
+
+}
+
+</script>
+</body>
+</html>

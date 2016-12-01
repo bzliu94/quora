@@ -45,4 +45,4 @@ A collection of challenge solutions.
 
 22. python uri - python
 
-23. trend analyzer - python
+23. trend analyzer - python, html, css, javascript, jquery, d3.js

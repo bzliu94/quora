@@ -1,0 +1,72 @@
+<html>
+<head>
+</head>
+<body>
+<!-- display parallel coordinates plot in upper frame -->
+<!-- display rules with support and confidence in lower frame -->
+<!-- pass along "start" and "end" from query string to both frames -->
+
+<script src="jquery-3.1.0.js" charset="utf-8"></script>
+
+<div style="width: 100%; height: 5%">"start" and "end" integer parameters and a "config_path" string parameter for query string are accepted.</div>
+<iframe id="top_frame" style="width: 100%; height: 70%"></iframe><br>
+<iframe id="bottom_frame" style="width: 100%; height: 20%"></iframe>
+
+<script>
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+// start_str and end_str contain string value of "start" and "end" in query string, respectively, and can be null
+
+var start_str = getParameterByName("start")
+var end_str = getParameterByName("end")
+
+var config_path = getParameterByName("config_path")
+
+var have_config_path = config_path != null
+
+var next_start = 0
+
+if (start_str == null) {
+  next_start = 0
+} else {
+  next_start = parseInt(start_str)
+}
+
+var next_end = 0
+
+if (end_str == null) {
+  next_end = next_start + 10 - 1
+} else {
+  next_end = parseInt(end_str)
+}
+
+var path1 = "par_coords.html?start=" + next_start.toString() + "&end=" + next_end.toString()
+
+if (have_config_path == true) {
+  path1 = path1 + "&config_path=" + config_path
+}
+
+var path2 = "sc.html?start=" + next_start.toString() + "&end=" + next_end.toString()
+
+if (have_config_path == true) {
+  path2 = path2 + "&config_path=" + config_path
+}
+
+$("#top_frame").attr("src", path1)
+
+$("#bottom_frame").attr("src", path2)
+
+// console.log($)
+
+</script>
+
+</body>
+</html>

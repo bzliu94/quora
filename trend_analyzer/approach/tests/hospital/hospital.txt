@@ -1,0 +1,5 @@
+Adapted from http://data.medicare.gov/dataset/Survey-of-Patients-Hospital-Experiences-HCAHPS-/rj76-22dk
+
+A list of hospital ratings for the Hospital Consumer Assessment of Healthcare Providers and Systems (HCAHPS). HCAHPS is a national, standardized survey of hospital patients about their experiences during a recent inpatient hospital stay.
+
+For Quora Trend Analyzer problem at http://www.quora.com/CodesprintQuora/Quora-Trend-Analyzer-week-long-problem
