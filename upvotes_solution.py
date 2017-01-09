@@ -66,7 +66,7 @@ def retrieveUnbrokenGESequencesHelper(count_values_deque, prev_GE_sequence, sequ
       else:
         GE_sequence = GESequence([curr_count])
         sequence_list.append(GE_sequence)
-        count_values_dequ = next_count_values_deque; prev_GE_sequence = GE_sequence; sequence_list = sequence_list
+        count_values_deque = next_count_values_deque; prev_GE_sequence = GE_sequence; sequence_list = sequence_list
 class Window:
   def __init__(self, sequences):
     self.sequences = sequences
