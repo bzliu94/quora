@@ -15,12 +15,12 @@
 # use feature bucketing for certain of the previously mentioned 
 # features as well as num. answers and promoted-to values; 
 # for num. answers and promoted-to values we use log transform; 
-# use thresholded associated topic popularity as a feature; 
+# use thresholded associated topic popularity status; 
 # use question text first word, context topic name, 
 # associated topic name not broken up into words 
-# with dictionary vectorizers; use anonymous author feature; 
+# with dictionary vectorizers; use anonymous author status; 
 # use log-transformed associated topic follower count sum; 
-# use lack of a context topic as a feature; use sparse features 
+# use lack of a context topic status; use sparse features 
 # and max-abs. value scaling and transduction using k-means clustering 
 # cluster identifier values binarized; use f-regression 
 # feature selection; solve within 34 seconds 

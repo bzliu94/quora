@@ -1,6 +1,6 @@
 # 2016-01-27
 
-# use logistic regression, tf-idf without idf and with word unigrams, 
+# use logistic regression, tf-idf without idf and with word {1, 2}-grams, 
 # anonymous author, number of context and associated topics that pass 
 # certain thresholds for popularity, non-negative word under-/over-shoot, 
 # inquisitive first word (who, what, where, when, why) existence, 
